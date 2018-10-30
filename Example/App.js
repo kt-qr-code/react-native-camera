@@ -20,7 +20,7 @@ export default class App extends Component {
 	constructor() {
 		super();
 		this.state = {
-			myText: 'My Original Text'
+			barcodeResult: 'No barcode detected.'
 		};
 	}
 
@@ -34,27 +34,57 @@ export default class App extends Component {
 				type={RNCamera.Constants.Type.back}
 				flashMode={RNCamera.Constants.FlashMode.on}
 				permissionDialogTitle={'Permission to use camera'}
-				permissionDialogMessage={'We need your permission to use your camera phone'}
-				onGoogleVisionBarcodesDetected={({ barcodes }) => {
+        permissionDialogMessage={'We need your permission to use your camera phone'}
+        onDynamsoftVisionBarcodesDetected={({ barcodes }) => {
 
 				  if (barcodes) {
-				    this.setState({myText: JSON.stringify(barcodes)})
+            // let res = JSON.stringify(barcodes);
+
+            if (barcodes.length == 0) {
+              this.setState({barcodeResult: 'No barcode detected.'})
+            }
+            else {
+              let text = '';
+              for (let i in barcodes) {
+                let type = barcodes[i]['type'];
+                let data = barcodes[i]['data'];
+                text += 'Type: ' + type + ', Value: ' + data;
+              }
+              this.setState({barcodeResult: text})
+            }
 				  }
 				  else {
-				    this.setState({myText: 'No barcode detected.'})
+				    this.setState({barcodeResult: 'No barcode detected.'})
 				  }
 
-				}}
-				// onBarCodeRead={({ barcodes }) => {
-				// 	if (barcodes) {
-				// 		this.setState({ myText: JSON.stringify(barcodes) });
-				// 	} else {
-				// 		this.setState({ myText: 'No barcode detected.' });
-				// 	}
+        }}
+        
+				// onGoogleVisionBarcodesDetected={({ barcodes }) => {
+
+				//   if (barcodes) {
+        //     // let res = JSON.stringify(barcodes);
+
+        //     if (barcodes.length == 0) {
+        //       this.setState({barcodeResult: 'No barcode detected.'})
+        //     }
+        //     else {
+        //       let text = '';
+        //       for (let i in barcodes) {
+        //         let type = barcodes[i]['type'];
+        //         let data = barcodes[i]['data'];
+        //         text += 'Type: ' + type + ', Value: ' + data;
+        //       }
+        //       this.setState({barcodeResult: text})
+        //     }
+				//   }
+				//   else {
+				//     this.setState({barcodeResult: 'No barcode detected.'})
+				//   }
+
 				// }}
 			>
 				<View style={styles.textBg}>
-					<Text style={styles.scanText}>{this.state.myText}</Text>
+					<Text style={styles.scanText}>{this.state.barcodeResult}</Text>
 				</View>
 			</RNCamera>
 		);
@@ -77,10 +107,10 @@ const deviceWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
 	textBg: {
 		width: deviceWidth,
-		height: 50,
-		justifyContent: 'center',
-		backgroundColor: '#43474a',
-		marginTop: 0
+		height: 100,
+		// justifyContent: 'center',
+		// backgroundColor: '#43474a',
+		marginTop: deviceHeight - 100
 	},
 	preview: {
 		flex: 1,
@@ -89,6 +119,7 @@ const styles = StyleSheet.create({
 	},
 	scanText: {
 		color: 'white',
-		textAlign: 'center'
+    textAlign: 'center',
+    fontSize: 20
 	}
 });
