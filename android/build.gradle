@@ -46,6 +46,7 @@ repositories {
 }
 
 dependencies {
+  implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
   compileOnly 'com.facebook.react:react-native:+'
   compileOnly 'com.facebook.infer.annotation:infer-annotation:+'
   implementation "com.google.zxing:core:3.3.0"

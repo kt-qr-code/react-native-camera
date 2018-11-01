@@ -86,6 +86,7 @@ type PropsType = typeof View.props & {
   onBarCodeRead?: Function,
   onPictureSaved?: Function,
   onGoogleVisionBarcodesDetected?: Function,
+  onDynamsoftVisionBarcodesDetected?: Function,
   faceDetectionMode?: number,
   flashMode?: number | string,
   barCodeTypes?: Array<string>,
@@ -186,6 +187,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
     onBarCodeRead: PropTypes.func,
     onPictureSaved: PropTypes.func,
     onGoogleVisionBarcodesDetected: PropTypes.func,
+    onDynamsoftVisionBarcodesDetected: PropTypes.func,
     onFacesDetected: PropTypes.func,
     onTextRecognized: PropTypes.func,
     faceDetectionMode: PropTypes.number,
@@ -405,6 +407,9 @@ export default class Camera extends React.Component<PropsType, StateType> {
           onGoogleVisionBarcodesDetected={this._onObjectDetected(
             this.props.onGoogleVisionBarcodesDetected,
           )}
+          onDynamsoftVisionBarcodesDetected={this._onObjectDetected(
+            this.props.onDynamsoftVisionBarcodesDetected,
+          )}
           onBarCodeRead={this._onObjectDetected(this.props.onBarCodeRead)}
           onFacesDetected={this._onObjectDetected(this.props.onFacesDetected)}
           onTextRecognized={this._onObjectDetected(this.props.onTextRecognized)}
@@ -431,6 +436,10 @@ export default class Camera extends React.Component<PropsType, StateType> {
       newProps.googleVisionBarcodeDetectorEnabled = true;
     }
 
+    if (props.onDynamsoftVisionBarcodesDetected) {
+      newProps.dynamsoftVisionBarcodeDetectorEnabled = true;
+    }
+
     if (props.onFacesDetected) {
       newProps.faceDetectorEnabled = true;
     }
@@ -443,6 +452,7 @@ export default class Camera extends React.Component<PropsType, StateType> {
       delete newProps.googleVisionBarcodeType;
       delete newProps.googleVisionBarcodeDetectorEnabled;
       delete newProps.ratio;
+      delete newProps.dynamsoftVisionBarcodeDetectorEnabled;
     }
 
     return newProps;
@@ -466,11 +476,13 @@ const RNCamera = requireNativeComponent('RNCamera', Camera, {
     accessibilityLiveRegion: true,
     barCodeScannerEnabled: true,
     googleVisionBarcodeDetectorEnabled: true,
+    dynamsoftVisionBarcodeDetectorEnabled: true,
     faceDetectorEnabled: true,
     textRecognizerEnabled: true,
     importantForAccessibility: true,
     onBarCodeRead: true,
     onGoogleVisionBarcodesDetected: true,
+    onDynamsoftVisionBarcodesDetected: true,
     onCameraReady: true,
     onPictureSaved: true,
     onFaceDetected: true,
